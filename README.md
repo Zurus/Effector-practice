@@ -50,7 +50,7 @@ npm run format   # Prettier: применить форматирование
 
 ## С чего читать код
 
-1. `src/app/model.ts` — 10 строк: `createEvent` + `createStore`.
+1. `src/app/model.ts` — `createEvent` + `createStore` + синхрон с `location.hash`.
 2. `src/entities/credit/model.ts` — `restore`, `combine`, производный стор.
 3. `src/features/credit-form/model/index.ts` — **главный файл**:
    `createGate`, `attach`, `sample`, `filter`, `done`/`fail`, `.pending`.
@@ -66,7 +66,7 @@ npm run format   # Prettier: применить форматирование
 | `createEvent`       | `app/model.ts`, `entities/credit` (selectCreditProduct), `features/*` |
 | `createStore` + `.on` | `app/model.ts`, поля формы в `features/credit-form/model`          |
 | `restore`           | `$client`, `$creditProducts`, `$statuses`                            |
-| `createEffect`      | все базовые `fx*` в `entities/*` и `features/credit-form/common.ts`   |
+| `createEffect`      | все базовые `fx*` в `entities/*`, `features/credit-form/common.ts`, `features/status-history`   |
 | `attach({effect})`  | локальные копии эффектов в `features/credit-form/model` (как в оригинале) |
 | `sample`            | пересчёт графика, отправка заявки, refreshHistory                     |
 | `combine`           | `$selectedProduct`, `$payload`, `$errors`, `$dti`, `$visibleStatuses` |
