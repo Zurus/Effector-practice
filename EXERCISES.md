@@ -8,6 +8,7 @@
 | Файл | Блок | Задачи |
 | ---- | ---- | ------ |
 | [exercises/00-README.md](./exercises/00-README.md) | Как учиться + конвенции + план и статус | — |
+| [exercises/00-essence.md](./exercises/00-essence.md) | Суть state-manager (~10 мин, опционально, без задач) | — |
 | [exercises/01-first-steps.md](./exercises/01-first-steps.md) | Уровень 0. Первые шаги (вход для нуля) | 0.1–0.3 |
 | [exercises/02-level-2-stores.md](./exercises/02-level-2-stores.md) | Уровень 2. Сторы и события | 2.1–2.9 |
 | [exercises/03-level-3-effects.md](./exercises/03-level-3-effects.md) | Уровень 3. Эффекты и асинхронность | 3.1–3.8 |
