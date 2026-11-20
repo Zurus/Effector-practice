@@ -201,5 +201,90 @@ const { model, component } = createEarlyLoanRepaymentModel(EarlyLoanRepaymentGat
 виджетов к состоянию фичи, честная оценка цены паттерна. Решение «в голове» —
 нет; это задача про осознанность выбора.
 
+### 5.6. Модель-фабрика: `compare-products` (эссе 5.5 → код)
+
+**Условие:** 4.5 выполнено. **Файл:** `features/compare-products/model.ts`.
+
+Переделай модель фичи в фабрику — так, как это сделано в оригинальном проекте
+(пример из 5.5):
+
+```ts
+const { model, component } = createEarlyLoanRepaymentModel(EarlyLoanRepaymentGate);
+```
+
+Требования:
+
+1. все единицы состояния фичи (`selectSecondProduct`, `$secondProductId`,
+   `$secondProduct`, `$comparison`) создаются **внутри** функции
+   `createCompareProductsModel(gate)` и возвращаются объектом;
+2. gate приходит **аргументом** — фабрика сама его не импортирует;
+3. `CompareProductsGate` остаётся на уровне модуля: это «гнездо» фичи,
+   которое известно странице и UI;
+4. на стороне модуля создаётся **один** экземпляр фабрики, и единицы
+   переэкспортируются — внешний API фичи не меняется: `CompareProducts.tsx`,
+   страницы и тесты работают без правок;
+5. «бесплатный» бонус из эссе 5.5: при открытии gate выбор второго продукта
+   сбрасывается к дефолтному (`"prime"`).
+
+<details>
+<summary>Решение</summary>
+
+```ts
+// features/compare-products/model.ts
+import { combine, createEvent, createStore, sample } from "effector";
+import { createGate, type Gate } from "effector-react";
+import { $creditProducts, $selectedProduct } from "entities/credit";
+import { CreditProduct } from "shared/types";
+
+/** «Гнездо» фичи: на уровне модуля, известно странице и UI */
+export const CompareProductsGate = createGate();
+
+/**
+ * Фабрика модели (паттерн оригинала): все единицы фичи создаются
+ * внутри функции и возвращаются. Gate приходит аргументом: фабрика
+ * знает «жизненный цикл», но сама его не импортирует.
+ */
+export const createCompareProductsModel = (gate: Gate) => {
+  const selectSecondProduct = createEvent<string>();
+  const $secondProductId = createStore("prime").on(selectSecondProduct, (_, id) => id);
+
+  const $secondProduct = combine(
+    $creditProducts,
+    $secondProductId,
+    (list, id): CreditProduct | null => list.find((p) => p.id === id) ?? null,
+  );
+
+  const $comparison = combine(
+    $selectedProduct,
+    $secondProduct,
+    (first, second): [CreditProduct | null, CreditProduct | null] => [first, second],
+  );
+
+  // «Бесплатно» из эссе 5.5: каждое открытие gate — выбор сбрасывается
+  sample({
+    clock: gate.open,
+    fn: () => "prime",
+    target: $secondProductId,
+  });
+
+  return { $secondProduct, $comparison, selectSecondProduct };
+};
+
+/** Единственный экземпляр модуля: внешний API фичи не меняется */
+export const { $secondProduct, $comparison, selectSecondProduct } =
+  createCompareProductsModel(CompareProductsGate);
+```
+
+**Проверка:** `npm run build` + `npm test`; в браузере (после «доведения» из 4.5 —
+в селекте видны все продукты): на странице «Заявка» выбери в «С чем сравнивать»
+«Ипотека» → уйди на «История статусов» → вернись: выбор сбросился на «Прима».
+
+</details>
+
+**Почему это «половина шага»:** модель всё ещё создаётся один раз при импорте
+модуля — это «форма» паттерна оригинала. «Полная» фабрика (изолированная модель
+на каждое открытие) — в финальной задаче 5.7 — и там же увидишь, что с ней
+делает виджет (эссе 5.5, пункт 3).
+
 ---
 
