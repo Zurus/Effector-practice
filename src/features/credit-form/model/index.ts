@@ -52,7 +52,7 @@ const $payload = combine(
   (amount, term, product): SendClaimPayload | null => {
     if (!product) return null;
     return { amount, term, rate: product.rate };
-  }
+  },
 );
 
 export const $schedule = createStore<PaymentSchedule | null>(null);
@@ -82,7 +82,7 @@ export const $errors = combine(
     if (amount > product.maxAmount) errors.push(Messages.amountGreaterThanMax(product));
     if (term > product.maxTermMonths) errors.push(Messages.termGreaterThanMax(product));
     return errors;
-  }
+  },
 );
 
 // --- Отправка заявки ----------------------------------------------------------

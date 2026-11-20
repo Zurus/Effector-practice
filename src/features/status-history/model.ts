@@ -26,10 +26,10 @@ sample({ clock: refreshHistory, target: fxLoadHistory });
 export const setStatusFilter = createEvent<string>();
 export const $statusFilter = createStore<string>("all");
 
-export const $statusOptions = $statuses.map(
-  (list) => Array.from(new Set(list.map((s) => s.status)))
+export const $statusOptions = $statuses.map((list) =>
+  Array.from(new Set(list.map((s) => s.status))),
 );
 
 export const $visibleStatuses = combine($statuses, $statusFilter, (list, filter) =>
-  filter === "all" ? list : list.filter((s) => s.status === filter)
+  filter === "all" ? list : list.filter((s) => s.status === filter),
 );

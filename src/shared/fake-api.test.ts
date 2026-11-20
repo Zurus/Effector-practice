@@ -16,7 +16,9 @@ describe("fakeApi", () => {
   });
 
   it("sendClaim: сумма кратна 7 — «серверная» ошибка", async () => {
-    await expect(fakeApi.sendClaim({ amount: 7000, term: 12, rate: 10 })).rejects.toThrow("кратна 7");
+    await expect(fakeApi.sendClaim({ amount: 7000, term: 12, rate: 10 })).rejects.toThrow(
+      "кратна 7",
+    );
   });
 
   it("sendClaim: иначе — CLM-<номер> и дата", async () => {

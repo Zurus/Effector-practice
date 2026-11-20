@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars -- заготовка упражнения 2.3 (exercises/03): setStatusFilter/filter/options станут использоваться после того, как вы достроите селект фильтра */
 import React from "react";
 import { useGate, useStore } from "effector-react";
 import { Button } from "shared/ui";

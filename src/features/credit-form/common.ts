@@ -17,7 +17,7 @@ import { SendClaimPayload } from "shared/types";
 
 /** Пересчёт графика платежей */
 export const fxRefreshScheduleApi = createEffect((payload: SendClaimPayload) =>
-  fakeApi.refreshSchedule(payload)
+  fakeApi.refreshSchedule(payload),
 );
 
 /**
@@ -26,5 +26,5 @@ export const fxRefreshScheduleApi = createEffect((payload: SendClaimPayload) =>
  * сумма, кратная 7, «падает» на сервере (правило — fakeApiConfig.claimRejectWhen).
  */
 export const fxSendClaimApi = createEffect((payload: SendClaimPayload) =>
-  fakeApi.sendClaim(payload)
+  fakeApi.sendClaim(payload),
 );

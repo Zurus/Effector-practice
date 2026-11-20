@@ -27,5 +27,5 @@ export const $selectedProductId = createStore("alpha").on(selectCreditProduct, (
 export const $selectedProduct = combine(
   $creditProducts,
   $selectedProductId,
-  (products, id): CreditProduct | null => products.find((p) => p.id === id) ?? null
+  (products, id): CreditProduct | null => products.find((p) => p.id === id) ?? null,
 );

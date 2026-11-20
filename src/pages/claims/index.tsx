@@ -15,7 +15,10 @@ import { PageLayout } from "shared/ui";
  * web-credit-management: useGate(XGate, {...}) прямо в компоненте страницы).
  */
 export const ClaimsPage: React.FC = () => (
-  <PageLayout title="Заявка на кредит" subtitle="Заполните параметры — график пересчитывается автоматически">
+  <PageLayout
+    title="Заявка на кредит"
+    subtitle="Заполните параметры — график пересчитывается автоматически"
+  >
     <ClientCard />
     <div className="grid">
       <CreditForm />

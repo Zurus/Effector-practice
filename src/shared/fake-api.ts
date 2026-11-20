@@ -1,4 +1,11 @@
-import { ClaimStatus, Client, CreditProduct, PaymentSchedule, SendClaimPayload, SendClaimResult } from "shared/types";
+import {
+  ClaimStatus,
+  Client,
+  CreditProduct,
+  PaymentSchedule,
+  SendClaimPayload,
+  SendClaimResult,
+} from "shared/types";
 
 /**
  * «Сервер»: фейковый API в одном месте.
@@ -91,7 +98,8 @@ export const fakeApi = {
   getClient: () => delay(fakeApiConfig.delays.client).then(() => CLIENT),
 
   /** Список кредитных продуктов */
-  getCreditProducts: () => delay(fakeApiConfig.delays.creditProducts).then(() => [...CREDIT_PRODUCTS]),
+  getCreditProducts: () =>
+    delay(fakeApiConfig.delays.creditProducts).then(() => [...CREDIT_PRODUCTS]),
 
   /** Пересчёт графика платежей */
   refreshSchedule: (payload: SendClaimPayload) =>
@@ -102,12 +110,14 @@ export const fakeApi = {
     new Promise<SendClaimResult>((resolve, reject) =>
       delay(fakeApiConfig.delays.claim).then(() => {
         if (fakeApiConfig.claimRejectWhen(payload)) {
-          reject(new Error("Сервис временно недоступен (сумма кратна 7). Попробуйте другую сумму."));
+          reject(
+            new Error("Сервис временно недоступен (сумма кратна 7). Попробуйте другую сумму."),
+          );
         } else {
           claimSeq += 1;
           resolve({ claimId: `CLM-${claimSeq}`, date: new Date().toLocaleString("ru-RU") });
         }
-      })
+      }),
     ),
 
   /** История статусов заявки */

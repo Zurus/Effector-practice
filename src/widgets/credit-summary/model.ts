@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars -- заготовка упражнения 2.4 (exercises/02): CRITICAL_DTI станет использоваться после того, как вы добавите $dtiCritical */
 import { combine } from "effector";
 import { createGate } from "effector-react";
 import { $schedule } from "features/credit-form";
