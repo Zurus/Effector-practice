@@ -7,8 +7,9 @@
 ## 1. ПРОЕКТ — КРАТКО
 
 - Что: effector-practice — тренажёр для изучения effector, мини-копия структуры
-  реального проекта web-credit-management (слои app / pages / features / entities /
-  widgets / shared, паттерн model/ui: логика в effector-сторах, React только читает).
+  реального корпоративного проекта («оригинал» в терминах README: слои app / pages /
+  features / entities / widgets / shared, паттерн model/ui: логика в effector-сторах,
+  React только читает).
 - Сценарий: сотрудник выбирает кредитный продукт, сумму, срок; график платежей
   пересчитывается «с сервера»; заявку можно отправить («сервер» отклоняет сумму,
   кратную 7). Вторая страница — история статусов заявки.
@@ -16,7 +17,7 @@
   детерминированные сбои, настраиваемый `fakeApiConfig`).
 - Стек (версии из package.json, проверено): React 18.3, TypeScript 5.6 (strict),
   Vite 5.4.21, effector 22.7.0, effector-react 22.5.1 (API v22!).
-  Версии подобраны 1-в-1 как в web-credit-management.
+  Версии подобраны 1-в-1 как в оригинальном проекте.
 - Навигация: стор `$activePage` в синхроне с `location.hash` (`#claims`/`#history`),
   роутера нет.
 - Репозиторий: `github.com/Zurus/Effector-practice`, ветка `main`;
@@ -35,7 +36,7 @@
 - `eslint.config.js`               — ESLint 9 flat: js + typescript-eslint + react + prettier
 - `.prettierrc`                    — printWidth 100, двойные кавычки, trailingComma all
 - `.github/workflows/ci.yml`       — CI: npm ci → build → test → lint (Node 22)
-- `README.md`                      — публичный обзор + сравнение структуры с web-credit-management
+- `README.md`                      — публичный обзор + сравнение структуры с оригинальным проектом
 - `INFO.MD`                        — этот файл: факты о проекте для агента
 - `improvements.md`                — план развития (EX-*, IMP-*, статусы, антипаттерны)
 - `EXERCISES.md`                   — индекс-ссылки на exercises/ (34 задачи, 5 уровней)

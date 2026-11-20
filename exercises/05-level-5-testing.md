@@ -180,7 +180,7 @@ describe("credit-form: валидация", () => {
 
 ### 5.5. Эссе: «модель на каждом gate» (фактории моделей)
 
-В web-credit-management модель создаётся **в момент открытия gate**:
+В оригинальном проекте модель создаётся **в момент открытия gate**:
 
 ```tsx
 const EarlyLoanRepaymentGate = createGate();

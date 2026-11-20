@@ -1,20 +1,21 @@
 # effector-practice
 
-Тренажёр для изучения **effector** на мини-копии структуры реального проекта
-`web-credit-management`: те же слои (`app / pages / features / entities / widgets / shared`),
-тот же паттерн **model/ui** (логика в effector-сторах, React только читает их),
-но без BPM, module federation, web-forms и внутреннего фреймворка EFR.
+Тренажёр для изучения **effector** на мини-копии структуры реального
+корпоративного проекта (ниже — «оригинал»): те же слои
+(`app / pages / features / entities / widgets / shared`), тот же паттерн
+**model/ui** (логика в effector-сторах, React только читает их), но без BPM,
+module federation, web-forms и внутреннего фреймворка.
 
 Сценарий: сотрудник выбирает кредитный продукт, вводит сумму и срок,
 график платежей пересчитывается «с сервера», заявку можно отправить.
 Вторая страница — история статусов заявки.
 
-Стек — те же версии, что в web-credit-management (по его yarn.lock):
+Стек — те же версии, что в оригинальном проекте (подобраны 1-в-1):
 **effector 22.7.0 + effector-react 22.5.1**, React 18, TypeScript 5, Vite.
 Значит паттерны `createGate`/`useGate`, `attach({effect})`, `fx.pending`
 читаются один в один в обоих проектах.
 
-## Запуск
+## Как начать
 
 ```bash
 npm install
@@ -25,6 +26,9 @@ npm run lint     # ESLint
 npm run format   # Prettier: применить форматирование
 ```
 
+Дальше — курс: **[exercises/00-README.md](./exercises/00-README.md)** (5 уровней,
+34 задачи; уровень 1 — без кода).
+
 Никакой сети не нужно: все «запросы к API» — фейковый «сервер» в
 `src/shared/fake-api.ts` (данные, задержки, детерминированные сбои).
 Нужен Node ≥ 18.
@@ -32,11 +36,11 @@ npm run format   # Prettier: применить форматирование
 Страницы синхронизированы с URL (hash-роутинг, без роутера):
 `#claims` (заявка), `#history` (статусы). Кнопки «назад»/«вперёд» работают.
 
-## Структура ↔ web-credit-management
+## Структура ↔ оригинал
 
-| web-credit-management                          | effector-practice                        | что отрабатывает |
+| Оригинальный проект                            | effector-practice                        | что отрабатывает |
 | ---------------------------------------------- | ---------------------------------------- | ---------------- |
-| `@efr/web-scripts` (webpack + module federation) | `vite`                                    | сборка (MF намеренно убран) |
+| web-scripts (webpack + module federation)      | `vite`                                    | сборка (MF намеренно убран) |
 | `pages/index.ts` → `RouteItem[]` + react-router | `pages/index.ts` + стор `$activePage` (синхрон с `location.hash`) | реестр страниц |
 | `entities/account` (стор + эффекты)            | `entities/client`, `entities/credit`     | сущность владеет данными |
 | `features/early-loan-repayment` (model/ui, Gate) | `features/credit-form`, `features/status-history` | фича = model + ui |
@@ -48,16 +52,12 @@ npm run format   # Prettier: применить форматирование
 Правило зависимостей (как в оригинале):
 `pages → features/widgets → entities → shared`. Никогда в обратную сторону.
 
-## С чего читать код
+## Куда смотреть
 
-1. `src/app/model.ts` — `createEvent` + `createStore` + синхрон с `location.hash`.
-2. `src/entities/credit/model.ts` — `restore`, `combine`, производный стор.
-3. `src/features/credit-form/model/index.ts` — **главный файл**:
-   `createGate`, `attach`, `sample`, `filter`, `done`/`fail`, `.pending`.
-4. `src/features/credit-form/ui/CreditForm.tsx` — как UI читает сторы (`useStore`)
-   и шлёт события.
-5. `src/features/status-history/*` — вторая фича попроще.
-6. `src/widgets/credit-summary/model.ts` — производные сторы в виджете.
+- **Главный файл проекта** — `src/features/credit-form/model/index.ts`:
+  `createGate`, `attach`, `sample`, `filter`, `done`/`fail`, `.pending` — всё в одном месте.
+- Чтение кода по шагам (с вопросами и проверкой понимания) —
+  [уровень 1 курса](./exercises/01-level-1-reading.md).
 
 ## Шпаргалка по тому, где что используется
 
@@ -84,10 +84,18 @@ npm run format   # Prettier: применить форматирование
 
 ## Упражнения
 
-Полный набор задач — в отдельном файле **[EXERCISES.md](./EXERCISES.md)**:
-5 уровней, 34 задачи — от чтения кода до тестирования моделей и рефакторинга.
+Курс — в папке [`exercises/`](./exercises/): 5 уровней, 34 задачи — от чтения кода
+до тестирования моделей и рефакторинга.
 
+- **Вход в курс**: [exercises/00-README.md](./exercises/00-README.md) — как
+  пользоваться, конвенции проекта, план и статус задач.
+- [EXERCISES.md](./EXERCISES.md) — индекс уровней курса.
 - В коде задачи помечены `TODO (упражнение N.M)`.
 - Решения — в свёрнутых блоках `<details>` в файлах `exercises/`. Не подглядывай.
 - После каждого изменения проверяй: `npm run build` (типы + сборка),
   `npm test` и `npm run lint`.
+
+## Для агента
+
+- `INFO.MD` — факты о проекте: карта файлов, команды, конвенции, грабли, журнал.
+- `improvements.md` — план улучшений проекта (IMP-*) и их статус.

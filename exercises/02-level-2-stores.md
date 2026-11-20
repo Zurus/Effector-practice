@@ -116,7 +116,7 @@ import { PageLayout } from "shared/ui";
 
 export const AboutPage: React.FC = () => (
   <PageLayout title="О приложении" subtitle="Тренажёр effector">
-    <p>Мини-копия структуры web-credit-management для тренировки effector.</p>
+    <p>Мини-копия структуры реального корпоративного проекта для тренировки effector.</p>
   </PageLayout>
 );
 ```
