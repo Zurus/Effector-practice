@@ -158,10 +158,51 @@ EXERCISES.md заменён кратным индексом-ссылками н�
 
 9. ОТКРЫТЫЕ ВОПРОСЫ
 --------------------------------------------------------
-- Нет .git — инициализировать VCS?
+- Нет .git — инициализировать VCS? (решено 2026-11-20: git init, см. разд. 10)
 - npm run preview — не проверено.
-- Разрешено ли добавлять vitest (новая зависимость для A4)?
+- Разрешено ли добавлять vitest (новая зависимость для A4)? (решено 2026-11-20: да, vitest@3 установлен, см. разд. 10)
 - Тип $client (Client vs Client | null) — исправить или оставить?
 - README «~35 задач» против EXERCISES «34» — мелкая нестыковка, правды в EXERCISES.md.
 - Причина повреждения node_modules (все файлы 0 байт) не установлена.
 - TODO в коде ссылаются на «упражнение N.M» — обновлять ли ссылки на файлы exercises/?
+
+10. ПРАВКИ ПО УЛУЧШЕНИЮ (применено 2026-11-20, коммиты в git)
+--------------------------------------------------------
+Топ-5 из improvements.md выполнен целиком:
+1. git: git init; базовый коммит 4534d3d. Формат сообщений — глобальный хук:
+   «[тег] [тег] сообщение» (например [study] [task] ...; Merge-сообщения
+   освобождаются).
+2. vitest@3.2.7 (vitest 5 требует Vite >= 6, у нас Vite 5.4.21 — не апгрейдили).
+   vitest.config.ts сливает vite.config.ts (алиасы работают). Скрипт npm test.
+   ВАЖНЫЙ НЮАНС effector 22.7: в allSettled/launch опция payload называется
+   `params` (не `parameters` и не `payload` — это v23+). Проверено по типам
+   (index.d.ts) и эмпирически. Также: allSettled/launch на простых событиях
+   с неверной опцией ведут себя странно (store получал внутренний объект scope).
+3. shared/fake-api.ts: все «данные сервера» (клиент, продукты, статусы),
+   задержки (600/400/500/800/700 мс) и правило отказа (amount % 7 === 0)
+   вынесены в одно место; fakeApiConfig настраивается. Модели — тонкие эффекты
+   поверх fakeApi. claimId теперь последовательный (CLM-1001...), а не random.
+4. URL-синхронизация: $activePage ↔ location.hash (#claims/#history) в
+   app/model.ts; назад/вперёд работают; без новых зависимостей.
+   tsconfig target поднят до ES2022.
+5. ESLint 9 flat (eslint.config.js: js + typescript-eslint + react +
+   eslint-config-prettier) + Prettier (.prettierrc, printWidth 100) +
+   .github/workflows/ci.yml (npm ci → build → test → lint, Node 22).
+   Скрипты: lint, lint:fix, format, format:check. CI не запускается, пока не
+   добавлен remote (origin). eslint-plugin-react требует eslint <= 9 (v10 не
+   поддержан) — установлен eslint@9.
+
+Найдено тестом (баг, фикс коммит ddaf520):
+$selectedProductId не был подписан на selectCreditProduct — смена продукта в
+селекте не работала вообще (combine брал старый id). Фикс: .on(selectCreditProduct,...).
+
+Файлы тестов: src/shared/lib.test.ts (formatFio/formatMoney),
+src/entities/credit/model.test.ts (fork + allSettled),
+src/shared/fake-api.test.ts (расчёт аннуитета, отказ %7, CLM-format),
+src/app/model.test.ts (pageFromHash, стор ↔ hash; node + stub window,
+top-level await). Итого 16 тестов.
+
+Заготовки упражнений 2.3/2.4 (StatusHistory.tsx, credit-summary/model.ts)
+не тронуты — eslint-disable @typescript-eslint/no-unused-vars с пояснением
+(импорты там намеренно неиспользуемые до выполнения задачи).
+
