@@ -45,7 +45,7 @@ export const $creditProducts = restore(fxGetCreditProducts, []);
 export const selectCreditProduct = createEvent<string>();
 
 /** Выбранный id продукта */
-export const $selectedProductId = createStore("alpha");
+export const $selectedProductId = createStore("alpha").on(selectCreditProduct, (_, id) => id);
 
 /**
  * Выбранный продукт — производный стор через combine:
