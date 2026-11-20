@@ -1,6 +1,6 @@
 import { combine, createEffect, createEvent, createStore, restore, sample } from "effector";
 import { createGate } from "effector-react";
-import { ClaimStatus } from "shared/types";
+import { fakeApi } from "shared/fake-api";
 
 /**
  * Модель «История статусов заявки»
@@ -9,16 +9,8 @@ import { ClaimStatus } from "shared/types";
 
 export const StatusHistoryGate = createGate();
 
-const MOCK_STATUSES: ClaimStatus[] = [
-  { date: "2025-11-01", status: "Создана", comment: "Заявка создана в системе" },
-  { date: "2025-11-02", status: "На проверке", comment: "Проверена комплектность документов" },
-  { date: "2025-11-03", status: "Комитет", comment: "На рассмотрении кредитным комитетом" },
-];
-
-/** Фейковый «запрос к API» */
-export const fxLoadHistory = createEffect(() =>
-  new Promise<ClaimStatus[]>((resolve) => setTimeout(() => resolve(MOCK_STATUSES), 700))
-);
+/** «Запрос к API»: история статусов (реализация — shared/fake-api) */
+export const fxLoadHistory = createEffect(() => fakeApi.getClaimStatuses());
 
 export const $statuses = restore(fxLoadHistory, []);
 export const $historyLoading = fxLoadHistory.pending;

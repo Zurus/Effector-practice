@@ -1,4 +1,5 @@
 import { combine, createEffect, createEvent, createStore, restore } from "effector";
+import { fakeApi } from "shared/fake-api";
 import { CreditProduct } from "shared/types";
 
 /**
@@ -6,37 +7,8 @@ import { CreditProduct } from "shared/types";
  * $accountOptions строился из данных web_product_info/Account).
  */
 
-const PRODUCTS: CreditProduct[] = [
-  {
-    id: "alpha",
-    name: "Потребительский «Альфа»",
-    rate: 14.9,
-    minAmount: 50_000,
-    maxAmount: 1_000_000,
-    maxTermMonths: 60,
-  },
-  {
-    id: "prime",
-    name: "Кредит «Прима»",
-    rate: 12.5,
-    minAmount: 100_000,
-    maxAmount: 3_000_000,
-    maxTermMonths: 84,
-  },
-  {
-    id: "mortgage",
-    name: "Ипотека",
-    rate: 19.2,
-    minAmount: 500_000,
-    maxAmount: 15_000_000,
-    maxTermMonths: 240,
-  },
-];
-
-/** Фейковый «запрос к API»: список продуктов */
-export const fxGetCreditProducts = createEffect(() =>
-  new Promise<CreditProduct[]>((resolve) => setTimeout(() => resolve(PRODUCTS), 400))
-);
+/** «Запрос к API»: список продуктов (реализация — shared/fake-api) */
+export const fxGetCreditProducts = createEffect(() => fakeApi.getCreditProducts());
 
 /** Все загруженные продукты */
 export const $creditProducts = restore(fxGetCreditProducts, []);

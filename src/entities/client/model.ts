@@ -1,4 +1,5 @@
 import { createEffect, restore } from "effector";
+import { fakeApi } from "shared/fake-api";
 import { Client } from "shared/types";
 
 /**
@@ -9,15 +10,8 @@ import { Client } from "shared/types";
  * а features зависят от entity.
  */
 
-/** Фейковый «запрос к API»: загрузка клиента */
-export const fxLoadClient = createEffect(() =>
-  new Promise<Client>((resolve) => {
-    setTimeout(
-      () => resolve({ id: 1, fio: "Иванов Иван Иванович", monthlyIncome: 120_000 }),
-      600
-    );
-  })
-);
+/** «Запрос к API»: загрузка клиента (реализация — shared/fake-api) */
+export const fxLoadClient = createEffect(() => fakeApi.getClient());
 
 /** Данные клиента. null — до первого успешного запроса.
  * restore = «стор, заполняемый результатом эффекта» */
