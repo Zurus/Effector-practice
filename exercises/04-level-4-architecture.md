@@ -5,8 +5,8 @@
 
 ### 4.1. Новая сущность `entities/purpose`
 
-**Файлы (новые):** `src/entities/purpose/model.ts`, `src/entities/purpose/index.ts`.
-**Файлы (правка):** `features/credit-form/model/index.ts`, `ui/CreditForm.tsx`.
+**Файлы (новые):** [`src/entities/purpose/model.ts`](../src/entities/purpose/model.ts), [`src/entities/purpose/index.ts`](../src/entities/purpose/index.ts).
+**Файлы (правка):** [`features/credit-form/model/index.ts`](../src/features/credit-form/model/index.ts), [`ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 
 Создай сущность «Назначение кредита»: список из 3–4 позиций
 («Авто», «Образование», «Ремонт», «Отпуск»), загружаемый эффектом
@@ -198,8 +198,8 @@ export { $errors };
 
 ### 4.4. Виджет «Предпросмотр графика»
 
-**Файлы (новые):** `src/widgets/payment-preview/model.ts`, `src/widgets/payment-preview/index.tsx`.
-**Файл (правка):** `pages/claims/index.tsx`.
+**Файлы (новые):** [`src/widgets/payment-preview/model.ts`](../src/widgets/payment-preview/model.ts), [`src/widgets/payment-preview/index.tsx`](../src/widgets/payment-preview/index.tsx).
+**Файл (правка):** [`pages/claims/index.tsx`](../src/pages/claims/index.tsx).
 
 Виджет со **своей** моделью: `$paymentPreview` — первые 3 строки графика
 (месяц, платёж, остаток долга; остаток приближённо = `total - payment * month`).
@@ -287,10 +287,10 @@ import { PaymentPreview } from "widgets/payment-preview";
 
 ### 4.5. Фича «Сравнение продуктов»
 
-**Файлы (новые):** `src/features/compare-products/model.ts`,
-`src/features/compare-products/ui/CompareProducts.tsx`,
-`src/features/compare-products/ui/index.ts`, `src/features/compare-products/index.ts`.
-**Файл (правка):** `pages/claims/index.tsx`.
+**Файлы (новые):** [`src/features/compare-products/model.ts`](../src/features/compare-products/model.ts),
+[`src/features/compare-products/ui/CompareProducts.tsx`](../src/features/compare-products/ui/CompareProducts.tsx),
+[`src/features/compare-products/ui/index.ts`](../src/features/compare-products/ui/index.ts), [`src/features/compare-products/index.ts`](../src/features/compare-products/index.ts).
+**Файл (правка):** [`pages/claims/index.tsx`](../src/pages/claims/index.tsx).
 
 Фича показывает таблицу «два продукта рядом»: первый — выбранный в форме
 (`$selectedProduct` из сущности), второй — выбирается в этой фиче.
@@ -423,8 +423,8 @@ import { CompareProducts } from "features/compare-products";
 
 ### 4.6. Два клиента
 
-**Файлы (правка):** `src/entities/client/model.ts`, `src/widgets/client-card/index.tsx`,
-`src/features/credit-form/model/index.ts`.
+**Файлы (правка):** [`src/entities/client/model.ts`](../src/entities/client/model.ts), [`src/widgets/client-card/index.tsx`](../src/widgets/client-card/index.tsx),
+[`src/features/credit-form/model/index.ts`](../src/features/credit-form/model/index.ts).
 
 Сейчас сущность «клиент» грузит одного зашитого человека. Сделай так, как в реальном
 банке: сущность владеет **списком** клиентов (3 штуки, один с доходом ниже

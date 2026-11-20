@@ -9,7 +9,7 @@
 
 ### 0.1. Первый стор и событие
 
-**Файлы:** `entities/client/model.ts`, `widgets/client-card/index.tsx`.
+**Файлы:** [`entities/client/model.ts`](../src/entities/client/model.ts), [`widgets/client-card/index.tsx`](../src/widgets/client-card/index.tsx).
 
 Добавь в карточку клиента кнопку «Поздороваться»: после нажатия под данными
 клиента появится строка текста. Состояние — за сущностью (как `$client`):
@@ -120,7 +120,7 @@ const greetingLine = useStore($greetingLine);
 
 ### 0.3. Первый `sample`
 
-**Файл:** `entities/client/model.ts`. UI в этой задаче не меняется!
+**Файл:** [`entities/client/model.ts`](../src/entities/client/model.ts). UI в этой задаче не меняется!
 
 Сделай приветствие автоматическим: как только клиент пришёл
 (`fxLoadClient.done`), `$greeting` заполняется сам — текстом «Клиент загружен».

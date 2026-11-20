@@ -6,7 +6,7 @@
 
 ### 3.1. Ставка из «сервера»
 
-**Файлы:** `features/credit-form/common.ts`, `model/index.ts`, `ui/CreditForm.tsx`.
+**Файлы:** [`features/credit-form/common.ts`](../src/features/credit-form/common.ts), [`model/index.ts`](../src/features/credit-form/model/index.ts), [`ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 Сейчас ставка берётся из `$selectedProduct.rate` и уходит в плат-лоад напрямую.
 Сделай так, как в реальном приложении: эффект `fxGetRateApi` «спрашивает сервер»
 (возвращает число, ~300 мс), а модель хранит его в `$rate` и подставляет в плат-лоад

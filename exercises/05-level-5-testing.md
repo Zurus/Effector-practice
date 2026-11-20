@@ -3,7 +3,7 @@
 
 ### 5.1. `createWatch` — отладка без devtools
 
-**Файл:** `src/main.tsx`.
+**Файл:** [`src/main.tsx`](../src/main.tsx).
 Подключи `createWatch` на `$schedule`, `$errors` и `$scheduleLoading`.
 Печатая сумму в форме, посмотри в консоли порядок событий и объясни своими словами:
 почему «Пересчёт…» мигает, и когда `$errors` меняется **без** пересчёта графика.
@@ -34,7 +34,7 @@ createWatch({ unit: $scheduleLoading, fn: (v) => console.log("[loading]", v) });
 
 ### 5.2. Рефакторинг: один `useUnit` вместо десяти `useStore`
 
-**Файл:** `src/features/credit-form/ui/CreditForm.tsx`.
+**Файл:** [`src/features/credit-form/ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 Замени все `useStore` на **один** `useUnit({ … })`. JSX при этом должен остаться
 почти без изменений (ключи объекта — это имена переменных в компоненте).
 
@@ -141,7 +141,7 @@ describe("entities/credit", () => {
 
 ### 5.4. Тесты: валидация формы
 
-**Файл (новый):** `src/features/credit-form/model/index.test.ts`.
+**Файл (новый):** [`src/features/credit-form/model/index.test.ts`](../src/features/credit-form/model/index.test.ts).
 
 Тест: после загрузки продуктов `changeAmount(1_000)` даёт ровно одну ошибку
 («меньше минимальной»); `changeAmount(300_000)` — ноль ошибок.
@@ -203,7 +203,7 @@ const { model, component } = createEarlyLoanRepaymentModel(EarlyLoanRepaymentGat
 
 ### 5.6. Модель-фабрика: `compare-products` (эссе 5.5 → код)
 
-**Условие:** 4.5 выполнено. **Файл:** `features/compare-products/model.ts`.
+**Условие:** 4.5 выполнено. **Файл:** [`features/compare-products/model.ts`](../src/features/compare-products/model.ts).
 
 Переделай модель фичи в фабрику — так, как это сделано в оригинальном проекте
 (пример из 5.5):

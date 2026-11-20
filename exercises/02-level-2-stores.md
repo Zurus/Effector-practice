@@ -5,7 +5,7 @@
 
 ### 2.1. `$clientShortName` (TODO в коде)
 
-**Файлы:** `entities/client/model.ts`, `widgets/client-card/index.tsx`.
+**Файлы:** [`entities/client/model.ts`](../src/entities/client/model.ts), [`widgets/client-card/index.tsx`](../src/widgets/client-card/index.tsx).
 Добавь стор `$clientShortName` (через `map` + `formatFio` из `shared/lib`)
 и выведи его в карточке клиента вместо полного ФИО.
 
@@ -29,7 +29,7 @@ const shortName = useStore($clientShortName);
 
 ### 2.2. Срок из списка (TODO в коде)
 
-**Файл:** `features/credit-form/ui/CreditForm.tsx`.
+**Файл:** [`features/credit-form/ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 Замени `<input>` для «Срок» на `<select>` с вариантами из `TERM_OPTIONS`.
 Модель не трогай.
 
@@ -51,7 +51,7 @@ const shortName = useStore($clientShortName);
 
 ### 2.3. Фильтр истории по статусу (TODO в коде)
 
-**Файл:** `features/status-history/ui/StatusHistory.tsx`.
+**Файл:** [`features/status-history/ui/StatusHistory.tsx`](../src/features/status-history/ui/StatusHistory.tsx).
 Модель уже готова: `$statusOptions`, `$statusFilter`, `setStatusFilter`, `$visibleStatuses`.
 Добавь `<select>` с вариантом «Все» рядом с кнопкой «Обновить».
 
@@ -74,7 +74,7 @@ const shortName = useStore($clientShortName);
 
 ### 2.4. Критическое ПДН (TODO в коде)
 
-**Файлы:** `widgets/credit-summary/model.ts`, `index.tsx`.
+**Файлы:** [`widgets/credit-summary/model.ts`](../src/widgets/credit-summary/model.ts), [`index.tsx`](../src/widgets/credit-summary/index.tsx).
 Добавь `$dtiCritical` (ПДН > `CRITICAL_DTI`) и красное предупреждение
 «ПДН выше критического» под сводкой.
 
@@ -98,7 +98,7 @@ const dtiCritical = useStore($dtiCritical);
 
 ### 2.5. Страница «О приложении» (TODO в коде)
 
-**Файлы:** `app/model.ts`, `pages/about/index.tsx` (новый), `pages/index.ts`.
+**Файлы:** [`app/model.ts`](../src/app/model.ts), [`pages/about/index.tsx`](../src/pages/about/index.tsx) (новый), [`pages/index.ts`](../src/pages/index.ts).
 Расширь `PageKey`, создай страницу, добавь маршрут. Навигация подхватит её сама.
 
 <details>
@@ -130,7 +130,7 @@ export const AboutPage: React.FC = () => (
 
 ### 2.6. Кнопка «Сбросить»
 
-**Файлы:** `shared/constants.ts`, `features/credit-form/model/index.ts`, `ui/CreditForm.tsx`.
+**Файлы:** [`shared/constants.ts`](../src/shared/constants.ts), [`features/credit-form/model/index.ts`](../src/features/credit-form/model/index.ts), [`ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 Событие `resetForm` возвращает `$amount` и `$term` к значениям по умолчанию.
 Подсказка: значения по умолчанию сейчас «запечены» в `createStore(300_000)` —
 вынеси их в константы.
@@ -163,7 +163,7 @@ $term.on(resetForm, () => DEFAULT_TERM);
 
 ### 2.7. Быстрые суммы
 
-**Файлы:** `features/credit-form/model/index.ts`, `ui/CreditForm.tsx`.
+**Файлы:** [`features/credit-form/model/index.ts`](../src/features/credit-form/model/index.ts), [`ui/CreditForm.tsx`](../src/features/credit-form/ui/CreditForm.tsx).
 Добавь событие `changeAmountBy` (дельта) и две кнопки «+10 000» / «+100 000».
 
 Подсказка: второй аргумент редьюсера `.on(event, (current, payload) => ...)` —
@@ -190,7 +190,7 @@ $amount.on(changeAmountBy, (current, delta) => current + delta);
 
 ### 2.8. «Недавно выбранные продукты»
 
-**Файл:** `features/credit-form/model/index.ts` (+ вывод в `CreditForm`).
+**Файл:** [`features/credit-form/model/index.ts`](../src/features/credit-form/model/index.ts) (+ вывод в `CreditForm`).
 Стор `$recentProducts: string[]` — последние 3 имени выбранных продуктов
 (без повторов, новое — первым). Выведи строкой под формой.
 
@@ -227,7 +227,7 @@ const recent = useStore($recentProducts);
 
 ### 2.9. Счётчик визитов по страницам
 
-**Файлы:** `app/model.ts`, `app/index.tsx`.
+**Файлы:** [`app/model.ts`](../src/app/model.ts), [`app/index.tsx`](../src/app/index.tsx).
 `$pageVisits: Record<PageKey, number>` — сколько раз открывали каждую страницу.
 Покажи счётчик текущей страницы в шапке (рядом с названием приложения).
 

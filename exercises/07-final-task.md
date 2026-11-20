@@ -27,7 +27,7 @@
 
 ## Шаги
 
-### Шаг 1. Типы — `shared/types.ts`
+### Шаг 1. Типы — [`shared/types.ts`](../src/shared/types.ts)
 
 Два интерфейса:
 
@@ -35,7 +35,7 @@
 - `EarlyRepaymentResult { savedInterest: number; newTermMonths: number }` —
   сэкономленные проценты и новый срок.
 
-### Шаг 2. «Сервер» — `features/early-loan-repayment/common.ts` (новый)
+### Шаг 2. «Сервер» — [`features/early-loan-repayment/common.ts`](../src/features/early-loan-repayment/common.ts) (новый)
 
 Эффект `fxCheckEarlyRepaymentApi(payload: EarlyRepaymentPayload): Promise<EarlyRepaymentResult>`:
 
@@ -48,7 +48,7 @@
 Формат — как в решениях 3.1 и 3.7: inline-проми́с в `common.ts`, в
 `shared/fake-api.ts` ничего не меняем.
 
-### Шаг 3. Модель-фабрика — `features/early-loan-repayment/model.ts` (новый)
+### Шаг 3. Модель-фабрика — [`features/early-loan-repayment/model.ts`](../src/features/early-loan-repayment/model.ts) (новый)
 
 Главный шаг. Фабрика `createEarlyRepaymentModel(gate)` создаёт и возвращает объектом:
 
@@ -71,7 +71,7 @@
 На стороне модуля: `EarlyRepaymentGate = createGate()` и **один** экземпляр
 фабрики с переэкспортом единиц (ровно как в 5.6).
 
-### Шаг 4. Форма — `features/early-loan-repayment/ui/` (новый)
+### Шаг 4. Форма — [`features/early-loan-repayment/ui/`](../src/features/early-loan-repayment/ui/) (новый)
 
 `ui/EarlyLoanRepayment.tsx` + `ui/index.ts` + `index.ts` фичи. Компонент:
 
@@ -85,7 +85,7 @@
 
 Все сторы подключи **одним `useUnit`** (5.2) — `useStore` здесь не должно быть.
 
-### Шаг 5. Виджет — `widgets/repayment-summary/index.tsx` (новый)
+### Шаг 5. Виджет — [`widgets/repayment-summary/index.tsx`](../src/widgets/repayment-summary/index.tsx) (новый)
 
 Карточка «Выгода»: **свой** gate (как в 4.4), читает `$result` фичи
 (виджет → фича — нормальное направление, 4.4). Результата нет — заглушка-текст.
@@ -93,15 +93,15 @@
 
 ### Шаг 6. Страница и маршрут
 
-- `pages/early-repayment/index.tsx` (новый): `PageLayout` с заголовком
+- [`pages/early-repayment/index.tsx`](../src/pages/early-repayment/index.tsx) (новый): `PageLayout` с заголовком
   «Раннее погашение» и `.grid`, в ней `<EarlyLoanRepayment />` + `<RepaymentSummary />`;
-- `pages/index.ts`: маршрут
+- [`pages/index.ts`](../src/pages/index.ts): маршрут
   `{ name: "Раннее погашение", key: "earlyRepayment", path: "/early-repayment", component: EarlyRepaymentPage }`;
-- `app/model.ts`: расширь `PageKey` и `PAGE_KEYS` на `"earlyRepayment"`.
+- [`app/model.ts`](../src/app/model.ts): расширь `PageKey` и `PAGE_KEYS` на `"earlyRepayment"`.
 
 Навигация подхватит страницу сама (`PageNav` читает `routes`) — как в 2.5.
 
-### Шаг 7. Тесты с `fork` (scope) — `features/early-loan-repayment/model.test.ts` (новый)
+### Шаг 7. Тесты с `fork` (scope) — [`features/early-loan-repayment/model.test.ts`](../src/features/early-loan-repayment/model.test.ts) (новый)
 
 Первый scope курса. Новых понятий — три, и только они:
 
