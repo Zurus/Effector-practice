@@ -1,0 +1,167 @@
+agent007.txt — накопленные данные агента (2026-11-19)
+========================================================
+(запись по собранным данным; новый анализ не проводился; agents.md не трогался)
+
+1. ПРОЕКТ — КРАТКО
+--------------------------------------------------------
+- Что: effector-practice — тренажёр для изучения effector, мини-копия структуры
+  реального проекта web-credit-management (слои app / pages / features / entities /
+  widgets / shared, паттерн model/ui: логика в effector-сторах, React только читает).
+- Сценарий: сотрудник выбирает кредитный продукт, сумму, срок; график платежей
+  пересчитывается «с сервера» (фейковые setTimeout, сети НЕТ); заявку можно отправить.
+  Вторая страница — история статусов заявки.
+- Стек (версии из package.json, проверено): React ^18.3.1, TypeScript ^5.6.3 (strict),
+  Vite ^5.4.11, effector 22.7.0, effector-react 22.5.1 (API v22!).
+  Версии подобраны 1-в-1 как в web-credit-management.
+- Роутера нет: навигация — кнопками через стор $activePage (app/model.ts).
+
+2. КАРТА ПРОЕКТА
+--------------------------------------------------------
+index.html                        — точка входа Vite (монтирует /src/main.tsx)
+package.json                      — scripts: dev / build / preview; зависимостей нет на тесты
+vite.config.ts                    — @vitejs/plugin-react + алиасы импортов
+tsconfig.json                     — strict: true; paths повторяют алиасы
+EXERCISES.md                      — БЫЛ: 34 задачи в 5 уровнях; 2026-11-19 разбит на
+                                    exercises/*, оригинал заменён кратким индексом
+README.md                         — обзор + сравнение структуры с web-credit-management
+src/main.tsx                      — ReactDOM createRoot, StrictMode
+src/app/index.tsx                 — корневой App: навигация + текущая страница
+src/app/model.ts                  — PageKey, selectPage, $activePage (TODO 2.5 строка 18)
+src/pages/index.ts                — routes: RouteItem[] (2 страницы)
+src/pages/claims/index.tsx        — страница «Заявка»: ClientCard + CreditForm + CreditSummary
+src/pages/history/index.tsx       — страница «История»: StatusHistory
+src/entities/client/model.ts      — fxLoadClient, $client = restore (TODO 2.1 строка 26)
+src/entities/credit/model.ts      — fxGetCreditProducts, $creditProducts, selectCreditProduct,
+                                    $selectedProductId, $selectedProduct (combine)
+src/features/credit-form/common.ts— «API-слой»: fxRefreshScheduleApi (~500 мс),
+                                    fxSendClaimApi (~800 мс, reject если amount % 7 === 0),
+                                    расчёт аннуитета
+src/features/credit-form/constants.ts — TERM_OPTIONS = [12,24,36,48,60,84]
+src/features/credit-form/model/index.ts — ГЛАВНАЯ МОДЕЛЬ: CreditFormGate, $amount/$term,
+                                    $payload (combine, | null), attach-копии эффектов,
+                                    $schedule, $errors (combine), sendClaim, $sending,
+                                    $claimResult/$claimError
+src/features/credit-form/ui/CreditForm.tsx — форма (TODO 2.2 строка 73)
+src/features/status-history/model.ts — StatusHistoryGate, fxLoadHistory (~700 мс, mock 3 записи),
+                                    $statuses, refreshHistory; фильтр ГОТОВ: $statusFilter,
+                                    $statusOptions, $visibleStatuses
+src/features/status-history/ui/StatusHistory.tsx — таблица + «Обновить» (TODO 2.3 строка 27)
+src/widgets/client-card/index.tsx — карточка клиента (читает $client)
+src/widgets/credit-summary/model.ts — CreditSummaryGate, $dti, $dtiOk (TODO 2.4 строка 22)
+src/widgets/credit-summary/index.tsx — сводка: клиент, платёж, переплата, ПДН
+src/shared/types.ts               — Client, CreditProduct, SendClaimPayload, PaymentSchedule,
+                                    SendClaimResult, ClaimStatus
+src/shared/lib.ts                 — formatMoney (Intl ru-RU RUB), formatFio
+src/shared/messages.ts            — Messages.* (функции, не строки)
+src/shared/constants.ts           — MIN_MONTHLY_INCOME=30000, MAX_DTI=50, CRITICAL_DTI=60, APP_NAME
+src/shared/ui/index.tsx           — PageLayout, Button, Alert, PageNav
+src/shared/styles.css             — все стили (216 строк, BEM-подобные классы)
+
+3. КОМАНДЫ
+--------------------------------------------------------
+Проверено 2026-11-19 (Node v22.23.2, npm 10.9.8):
+- npm ci                        — OK (71 пакет)
+- npm run dev                   — OK, http://localhost:5173 (HTTP 200)
+- npm run build                 — OK: tsc --noEmit && vite build
+- ./node_modules/.bin/tsc --noEmit — OK
+
+Не проверено:
+- npm run preview (заявлено в package.json)
+
+Важно по окружению:
+- `npx tsc` в этой среде подхватывает чужой deprecated-пакет tsc@2.0.4 — НЕ использовать.
+  Быстрая проверка типов: ./node_modules/.bin/tsc --noEmit или npm run build.
+- Тестов нет: в package.json/lock нет test-скрипта, vitest/jest.
+- Node ≥ 18 (требование README; локально v22.23.2).
+
+4. СОГЛАШЕНИЯ
+--------------------------------------------------------
+- Только API v22: нет fx.settled, нет debounce из коробки, нет Gate({component}).
+  Индикатор загрузки — fx.pending (стор-булево).
+- Бизнес-логика — в model/; React (ui/) только useStore + отправка событий.
+- Зависимости: pages → features/widgets → entities → shared. Никогда в обратную сторону.
+- Gate: createGate() в model → useGate(Gate) в компоненте; страница рендерит САМ компонент
+  (в v22 <XGate/> в JSX рендерит null).
+- attach({effect}) — только для существующих эффектов (common.ts = «API-слой»);
+  новая асинхронная функция — createEffect.
+- Импорты через алиасы: app/*, pages/*, features/*, entities/*, widgets/*, shared/*
+  (vite.config.ts + tsconfig paths).
+- После каждого изменения: npm run build.
+- TODO в коде помечены «TODO (упражнение N.M)» — номера задач из EXERCISES.md/exercises/.
+
+5. ТЕКУЩЕЕ СОСТОЯНИЕ (после починки, 2026-11-19)
+--------------------------------------------------------
+- Всё работает: dev-сервер, сборка, обе страницы, пересчёт графика, отправка заявки
+  (включая ошибку при сумме, кратной 7), история статусов.
+- НЕ выполнено: 5 TODO в коде (2.1–2.5) и остальные 29 задач курса.
+- Нет тестов. Нет .git (VCS не инициализирован). dist/ в рабочей папке (в .gitignore).
+- Нюанс типов: $client типирован как Client, но начальное значение null
+  (restore(fxLoadClient, null as unknown as Client)) — UI проверяет !client.
+
+6. БАГ «ПРОЕКТ НЕ ЗАПУСКАЕТСЯ» — НАЙДЕНО И ИСПРАВЛЕНО (2026-11-19)
+--------------------------------------------------------
+Симптом: `npm run dev` печатал заголовок vite, но «ready» не появлялся, порт 5173
+не слушался, `vite --version` и `cat node_modules/vite/bin/vite.js` — пусто, exit 0.
+Причина: node_modules повреждены — 2478 из 2534 файлов были 0 байт (усечены),
+в т.ч. node_modules/vite/bin/vite.js. Vite «запускался» на пустом скрипте.
+Диагностика: find node_modules -type f -size 0 (2478 шт.); wc -c vite.js (0).
+Лечение: rm -rf node_modules && npm ci → 71 пакет, 0 пустых файлов.
+После: vite --version OK, npm run dev → ready ~800 мс, HTTP 200, npm run build OK.
+Вывод на будущее: если vite/тс «молчат» без ошибок — первым делом проверить
+пустые файлы в node_modules и переустановить (rm -rf node_modules && npm ci).
+Причина повреждения не установлена (не проверял).
+
+7. РАЗБИВКА EXERCISES.md (сделано 2026-11-19)
+--------------------------------------------------------
+Каталог exercises/ (контент перенесён дословно, решения в <details> на месте):
+- 00-README.md           — как пользоваться + конвенции + оглавление (45 строк)
+- 01-level-1-reading.md  — уровень 1, задачи 1.1–1.6
+- 02-level-2-stores.md   — уровень 2, задачи 2.1–2.9
+- 03-level-3-effects.md  — уровень 3, задачи 3.1–3.8
+- 04-level-4-architecture.md — уровень 4, задачи 4.1–4.6
+- 05-level-5-testing.md  — уровень 5, задачи 5.1–5.5
+- 06-self-check.md       — Самопроверка + «Что дальше»
+EXERCISES.md заменён кратным индексом-ссылками на exercises/.
+
+8. ЗАДАЧИ ДЛЯ БУДУЩИХ СЕССИЙ (приоритетный план)
+--------------------------------------------------------
+Новичок (по одной маленькой задаче, каждая — 1 файл + build):
+- B1 прогнать сценарий в браузере без кода (exercises/01, задача 1.1)
+- B2 $clientShortName: entities/client/model.ts (.map + formatFio) — упр. 2.1
+- B3 срок: input → select из TERM_OPTIONS — CreditForm.tsx — упр. 2.2
+- B4 фильтр истории: select в StatusHistory.tsx (модель уже готова) — упр. 2.3
+- B5 $dtiCritical + красный Alert — widgets/credit-summary — упр. 2.4
+- B6 кнопки быстрых сумм (changeAmount уже есть) — CreditForm.tsx — упр. 2.7
+- B7 resetClaim: событие + сброс $amount/$term/$claimResult/$claimError — упр. 2.6
+- B8 страница «О приложении»: PageKey + route + pages/about — упр. 2.5
+Базовый:
+- E1 счётчик визитов $pageVisits — app/model.ts — упр. 2.9
+- E2 createWatch — временная отладка $payload — упр. 5.1
+- E3 $recentProducts — entities/credit/model.ts — упр. 2.8
+- E4 ставка «с сервера»: fxGetRateApi в common.ts + $rate в $payload — упр. 3.1
+- E5 кэш продуктов: sample по Gate.open только если $creditProducts пуст — упр. 3.2
+Средний:
+- M1 дебаунс «вручную» (v22) — упр. 3.4
+- M2 гонка запросов (id запроса, последний выигрывает) — упр. 3.3
+- M3 автоповтор отправки при fail (≤2) — упр. 3.5
+- M4 $canSend (combine $payload/$errors/$sending) — упр. 4.2
+- M5 страхование: $insurance влияет на payload/calculate — упр. 3.8
+- M6 новая сущность entities/purpose — упр. 4.1
+Продвинутый:
+- A1 вынести валидацию в model/validation.ts (рефакторинг) — упр. 4.3
+- A2 виджет «Предпросмотр графика» (model + ui) — упр. 4.4
+- A3 фича «Сравнение продуктов» + страница — упр. 4.5
+- A4 vitest: npm i -D vitest + тесты entities/credit и валидации — упр. 5.3/5.4
+  (команда npx vitest run — не проверена, пакет не установлен)
+Не в плане (есть в exercises/): 1.1–1.6 (чтение), 3.6 журнал, 3.7 промокод,
+4.6 два клиента, 5.2 useUnit, 5.5 эссе.
+
+9. ОТКРЫТЫЕ ВОПРОСЫ
+--------------------------------------------------------
+- Нет .git — инициализировать VCS?
+- npm run preview — не проверено.
+- Разрешено ли добавлять vitest (новая зависимость для A4)?
+- Тип $client (Client vs Client | null) — исправить или оставить?
+- README «~35 задач» против EXERCISES «34» — мелкая нестыковка, правды в EXERCISES.md.
+- Причина повреждения node_modules (все файлы 0 байт) не установлена.
+- TODO в коде ссылаются на «упражнение N.M» — обновлять ли ссылки на файлы exercises/?
