@@ -47,12 +47,15 @@
                                        07-final-task (5.7); решения в `<details>`
 
 src/:
-- `main.tsx`                          — ReactDOM createRoot, StrictMode
+- `main.tsx`                          — ReactDOM createRoot, StrictMode, initDebug()
 - `app/index.tsx`                     — корневой App: навигация + текущая страница
 - `app/model.ts`                      — PageKey, selectPage, $activePage (синхрон с
                                        location.hash), pageFromHash, hashChanged
                                        (заготовка упражнения 2.5)
 - `app/model.test.ts`                 — тесты URL-синхронизации (node + stub window)
+- `app/debug.ts`                      — IMP-1.3: `createWatch({unit, fn})` на 9 юнитах,
+                                       включается `VITE_DEBUG=1 npm run dev` (только dev);
+                                       `app/debug.test.ts` — тесты флага
 - `pages/index.ts`                    — routes: RouteItem[] (2 страницы)
 - `pages/claims/index.tsx`            — страница «Заявка»: ClientCard + CreditForm + CreditSummary
 - `pages/history/index.tsx`           — страница «История»: StatusHistory
@@ -102,7 +105,7 @@ src/:
 | `npm ci`                         | установка               | OK (воспроизводит package-lock, 319 пакетов — 2026-11-20) |
 | `npm run dev`                    | dev-сервер              | OK, http://localhost:5173 (HTTP 200) |
 | `npm run build`                  | типы + прод-сборка      | OK: `tsc --noEmit && vite build` |
-| `npm test`                       | vitest                  | OK, 16/16 (2026-11-20)     |
+| `npm test`                       | vitest                  | OK, 18/18 (2026-11-21)     |
 | `npm run lint`                   | ESLint                  | OK, 0 ошибок (2026-11-20)  |
 | `npm run format` / `format:check`| Prettier                | OK                         |
 | `./node_modules/.bin/tsc --noEmit` | только типы           | OK                         |
@@ -129,9 +132,9 @@ Node ≥ 18 (требование README; локально v22.23.2).
 
 ## 5. ТЕКУЩЕЕ СОСТОЯНИЕ (2026-11-20)
 
-- Работает всё: dev-сервер (HTTP 200), сборка, тесты 16/16, линт 0, push в GitHub.
+- Работает всё: dev-сервер (HTTP 200), сборка, тесты 18/18, линт 0, push в GitHub.
 - Не выполнено: 5 `TODO (упражнение 2.1–2.5)` в коде и учебные задачи EX-*
-  (список — `improvements.md`); roadmap IMP — 6 из 28 пунктов.
+  (список — `improvements.md`); roadmap IMP — 7 из 28 пунктов.
 - Первый CI-запуск на GitHub не проверен (на машине нет `gh`/токена).
 - Нюанс типов: `$client` типирован как `Client`, но начальное значение `null`
   (`restore(fxLoadClient, null as unknown as Client)`) — UI проверяет `!client`.
@@ -152,6 +155,11 @@ Node ≥ 18 (требование README; локально v22.23.2).
 6. Если vite/tsc «молчат» без ошибок — первым делом проверить пустые файлы:
    `find node_modules -type f -size 0`. Лечение: `rm -rf node_modules && npm ci`.
 7. В git-bash нет `pkill`/`pgrep`: `netstat -ano | grep 5173` + `taskkill //F //PID <pid>`.
+8. **effector 22.7**: у `createWatch` сигнатура **объектная** —
+   `createWatch({ unit, fn, scope? })`. Два аргумента (`createWatch(unit, fn)`,
+   как в старых доках/примерах) падают с `Cannot read properties of undefined
+   (reading 'graphite')`. Проверено по `index.d.ts` + эмпирически (тест в
+   `src/app/debug.test.ts`).
 
 ## 7. РЕШЕНИЯ
 
@@ -185,6 +193,13 @@ Node ≥ 18 (требование README; локально v22.23.2).
   06-next-steps.
 - Замечено (решение — за пользователем): в комментариях app-кода остаётся
   название `web-credit-management` (ранняя нейтрализация — только в документах).
+- IMP-1.3: `src/app/debug.ts` — отладчик: `createWatch({unit, fn})` на 9 ключевых
+  юнитах, включается `VITE_DEBUG=1 npm run dev` (только dev-сборка) + `debug.test.ts`
+  (2 теста) + `src/vite-env.d.ts` (типы `vite/client` для `import.meta.env`).
+  Файл в `app/`, а не в `shared/` (спека IMP-1.3): слойность — shared не видит
+  features. Грабель, задокументированная: в 22.7 у `createWatch` сигнатура
+  **объектная** `{ unit, fn, scope? }` — два аргумента падают («graphite»);
+  курс 5.1 уже учил объектную форму, в README два-аргументная поправка.
 
 ### 2026-11-20
 - `git init` + push на GitHub (`Zurus/Effector-practice`). Коммиты:

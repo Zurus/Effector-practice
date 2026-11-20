@@ -12,8 +12,11 @@
 ### Этап 1. Фундамент и гигиена
 - [x] **IMP-1.1** git init + коммиты по задачам (`4534d3d`)
 - [x] **IMP-1.2** vitest + первые тесты моделей (`82e33dc`)
-- [ ] **IMP-1.3** (S) — `src/shared/debug.ts`: один `createWatch`-флаг отладки
-      (`DEBUG && createWatch($payload, console.log)`)
+- [x] **IMP-1.3** `src/app/debug.ts` + тест `debug.test.ts`: `createWatch({unit, fn})`
+      на 9 ключевых юнитах, включается `VITE_DEBUG=1 npm run dev` (только dev).
+      Файл в `app/`, а не в `shared/`: слойность — shared не видит features.
+      Грешность: в 22.7 у `createWatch` сигнатура **объектная** — два аргумента
+      (`createWatch(unit, fn)`) упадут с «graphite»
 - [x] **IMP-1.4** ESLint 9 flat + Prettier (`5df5b87`)
 - [x] **IMP-1.5** CI: `.github/workflows/ci.yml` (`5df5b87`) — осталось: посмотреть
       первый запуск на GitHub

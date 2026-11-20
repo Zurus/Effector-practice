@@ -76,9 +76,12 @@ npm run format   # Prettier: применить форматирование
 | `createGate`        | `features/*/model`, `widgets/credit-summary/model`                    |
 | `useGate` + `useStore` | `features/*/ui`, `widgets/*`                                   |
 
-Полезно знать, хотя в app-коде не используется: `useUnit` (подписка на событие
-из компонента), `effector/createWatch` (наблюдение за стором для отладки:
-`createWatch($schedule, console.log)`). `fork`/`allSettled` уже используются в
+Полезно знать: `useUnit` (подписка на событие из компонента — в app-коде пока
+не используется, а в задаче 5.2 курса). `createWatch` — наблюдение за юнитом
+для отладки: в 22.7 сигнатура объектная —
+`createWatch({ unit: $schedule, fn: console.log })` (не два аргумента!);
+готовый отладчик — `src/app/debug.ts` (включается `VITE_DEBUG=1`).
+`fork`/`allSettled` уже используются в
 тестах моделей — см. `src/**/*.test.ts` (важный нюанс v22.7: опция — `params`,
 не `payload`/`parameters`).
 
